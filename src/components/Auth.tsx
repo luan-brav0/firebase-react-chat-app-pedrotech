@@ -26,7 +26,7 @@ const Auth: FC<Props> = (isAuth, setIsAuth) => {
   };
 
   return (
-    <div className="auth">
+    <div className="container auth">
       <p>
         Sign In with Google to continue
       </p>
