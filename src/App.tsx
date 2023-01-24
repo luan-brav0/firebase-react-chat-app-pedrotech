@@ -3,6 +3,7 @@ import './App.css';
 import './main.css';
 import Auth  from './components/Auth'
 import SelectRoom  from './components/SelectRoom'
+import ChatRoom  from './components/ChatRoom'
 import Cookies from 'universal-cookie';
 
 const App: FC = () => {
@@ -15,17 +16,19 @@ const App: FC = () => {
 
   if(!isAuth){
     return (
-      <div className="App">
-        <Auth />
+      <div id='Auth App' className="App">
+        <Auth isAuth={isAuth} setIsAuth={setIsAuth} />
       </div>
     );
    };
 
    return (
-    <div>
-      {room ? 
-      <div>chat</div> :
-      <SelectRoom roomInputRef={roomInputRef} room={room} setRoom={setRoom} /> }
+    <div id='App Chat Room' className='App'>
+      { room ? 
+      <ChatRoom room={ room } /> :
+      <SelectRoom roomInputRef={roomInputRef} room={room} setRoom={setRoom} /> 
+      }
+      
     </div>
    );
 };

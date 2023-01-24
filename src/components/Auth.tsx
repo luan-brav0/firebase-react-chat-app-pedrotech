@@ -7,8 +7,12 @@ import '../main.css';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
+interface Props {
+  isAuth: string;
+  setIsAuth: React.Dispatch<React.SetStateAction<string>>
+}
 
-const Auth: FC = () => {
+const Auth: FC<Props> = (isAuth, setIsAuth) => {
   const signInWithGoogle = async () => {
     try{
     const result: UserCredential = await signInWithPopup(auth, provider);
@@ -27,7 +31,7 @@ const Auth: FC = () => {
         Sign In with Google to continue
       </p>
       <button onClick={signInWithGoogle}
-      className="flex flex-row p-2 mx-auto content-center justify-between border-[2px] border-gray-500 hover:text-blue-700 hover:border-blue-700">
+      className="flex flex-row p-2 mx-auto content-center justify-between border-[2px] rounded-full border-gray-500 hover:text-blue-700 hover:border-blue-700">
         <img src={ googleLogo }
          alt="'Google Logo'"
          className="h-8 mx-2" />
