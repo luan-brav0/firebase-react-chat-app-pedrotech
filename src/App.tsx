@@ -21,13 +21,15 @@ const App: FC = () => {
         <NavBar />
       </div>
       <div id="hero" className='flex flex-col h-full space-around'>
+        {/* check if user is authenticated */}
         {!isAuth ?
           <div id='auth'>
-            <Auth isAuth={isAuth} setIsAuth={setIsAuth} />
+             <Auth isAuth={isAuth} setIsAuth={setIsAuth} />
           </div>
           :
-          <div id='chat-room' className='my-auto'>
-            {room ?
+          <div id='hero-cont' className='my-auto'>
+            {/* check if in a room, if so display such room */}
+            {true ?
               <ChatRoom room={room} />
               :
               <SelectRoom roomInputRef={roomInputRef} room={room} setRoom={setRoom} />
@@ -39,4 +41,3 @@ const App: FC = () => {
   );
 };
 export default App;
-

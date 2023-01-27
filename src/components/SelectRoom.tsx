@@ -12,7 +12,7 @@ const SelectRoom: FC<Props> = ({ roomInputRef, setRoom, room }) => {
   return (
     <div id='select-room' className='relative mx-auto h-auto'>
       <div id='select-input-container' className='border-[3px] border-blue-300 rounded-full py-[0.2rem] mx-auto my-4 max-w-[20rem] hover:border-blue-400'>
-        <input className='outline-0 text-center px-[1rem] w-full bg-transparent'
+        <input className='outline-0 text-center px-[1rem] w-full bg-transparent focus:border-none'
           placeholder='Enter Room Name'
           ref={roomInputRef} />
       </div>
