@@ -3,8 +3,8 @@ import '../main.css';
 
 
 interface Props {
-  room: string;
-  setRoom: React.Dispatch<React.SetStateAction<string>>;
+  room: string | null;
+  setRoom: React.Dispatch<React.SetStateAction<string | null>>;
   roomInputRef: React.MutableRefObject<HTMLInputElement | null>;
 }
 

@@ -1,6 +1,8 @@
-import React, { FC, useEffect, useState } from 'react';
-import { DocumentData, addDoc, collection, onSnapshot, query, serverTimestamp, where } from "firebase/firestore";
+import React, { FC, ReactNode, useEffect, useState } from 'react';
+import { DocumentData, addDoc, collection, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore";
+import UserProfile from 'firebase/auth'
 import { auth, db } from '../firebase-config';
+import Cookies from 'universal-cookie';
 
 export interface Props {
     room: string;
@@ -23,6 +25,7 @@ const ChatRoom: FC<Props> = ({ room }) => {
             createdAt: serverTimestamp(),
             user: auth.currentUser?.displayName,
             room: room,
+            picture: auth.currentUser?.photoURL
         };
 
         // sends message data to firestore's doc
@@ -42,25 +45,50 @@ const ChatRoom: FC<Props> = ({ room }) => {
     };
     // queries messages from current room  
     useEffect(() => {
-        const queryMessages = query(msgRef, where("room", "==", room));
-        onSnapshot(queryMessages, (snapshot) => {
+        const queryMessages = query(msgRef,
+            where("room", "==", room),
+            orderBy("createdAt")
+            );
+        const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
             let messages: Array<DocumentData> = [];
             snapshot.forEach((doc) => {
                 messages.push({ ...doc.data(), id: doc.id });
             });
             setMessages(messages);
         });
+        return () => unsuscribe();
     }, []);
 
     return (
-        <div id='chat-room' className='container flex flex-col mx-auto border border-gray-400 rounded-3xl'>
+        <div id='chat-room' className='container flex flex-col mx-auto my-4 max-h-full border border-gray-400 rounded-3xl max-w-[1100px]'>
             {/* Room Title */}
-            <h1 id='room-name' className='self-center text-[2rem] border-b border-gray-400 w-full'>
-                {room}
+            <h1 id='room-name' className='self-center text-[2rem] border-b bg-blue-600 text-[#eee] rounded-t-3xl w-full'>
+                {room.toUpperCase()}
             </h1>
             {/* Messages Feed */}
-            <div id='msg-feed' className="overflow-y-scroll max-h-[69vh]">
-                {messages.map((message) => <p>{message.text}</p>)}
+            <div id='msg-feed' className="overflow-y-scroll h-full overflow-hidden">
+                {/* render messages with image */}
+                {messages.map((message: DocumentData): ReactNode => {
+                    // changes current user's messages to the left 
+                    let cookies = new Cookies()
+
+                    return (
+                        <div id='message'
+                            key={message.id}
+                            className={`message pb-2 flex h-fit ${message.user === cookies.get('current-user') ? "flex-row-reverse " : "flex-row"} `}>
+                            <img src={message.picture}
+                                alt={message.user}
+                                className='rounded-full w-12 max-h-full mx-2 self-center' />
+                                
+                            <div id="msg-cont" className={`border rounded-3xl w-fit px-3 py-1 max-w-[60%] ${message.user === cookies.get('current-user') ? "bg-blue-700  " : "bg-[#666]"} text-[#eee] self-center`}>
+                                <p id='msg-text'
+                                    className="w-full h-auto break-words text-start">
+                                    {message.text}
+                                </p>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
             {/* Send Message Form */}
             <form id='msg-form'

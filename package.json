@@ -1,6 +1,6 @@
 {
   "name": "firebase-react-chat-app-pedrotech",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.20.7",

@@ -10,18 +10,18 @@ import Cookies from 'universal-cookie';
 const App: FC = () => {
   const cookies = new Cookies();
 
-  const [room, setRoom] = useState<string>("");
+  const [room, setRoom] = useState<string | null>("");
 
-  const [isAuth, setIsAuth] = useState<string>(cookies.get("auth-token"));
+  const [isAuth, setIsAuth] = useState<boolean | string | undefined>(cookies.get('auth-token'));
   const roomInputRef = useRef<null | HTMLInputElement>(null);
 
   return (
-    <div id='app' className="App flex flex-col space-between h-[100vh] w-[100vw]">
-        <NavBar />
+    <div id='app' className="App flex flex-col space-between h-full max-h-[100vh] w-[100vw]">
+        <NavBar isAuth={isAuth} setIsAuth={setIsAuth} setRoom={setRoom}  />
         {!isAuth ? (
           <Auth isAuth={isAuth} setIsAuth={setIsAuth} />
         ) : (
-          <div id='hero' className='flex flex-col justify-center self-center h-full w-full '>
+          <div id='hero' className='flex flex-col justify-center self-center h-[90vh] w-full'>
             {room ?
               <ChatRoom room={room} />
               :

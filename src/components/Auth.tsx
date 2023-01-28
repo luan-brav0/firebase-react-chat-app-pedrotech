@@ -3,13 +3,13 @@ import { auth, provider } from '../firebase-config.js';
 import { UserCredential, signInWithPopup } from 'firebase/auth';
 import googleLogo from '../img/logo-google.png';
 import '../main.css';
-
 import Cookies from 'universal-cookie';
+
 const cookies = new Cookies();
 
 interface Props {
-  isAuth: string;
-  setIsAuth: React.Dispatch<React.SetStateAction<string>>;
+  isAuth: string | boolean | undefined;
+  setIsAuth: React.Dispatch<React.SetStateAction<string | boolean | undefined>>;
 }
 
 const Auth: FC<Props> = ({ isAuth, setIsAuth }) => {
@@ -18,6 +18,7 @@ const Auth: FC<Props> = ({ isAuth, setIsAuth }) => {
       const result: UserCredential = await signInWithPopup(auth, provider);
       console.log(result)
       cookies.set("auth-token", result.user.refreshToken);
+      cookies.set("current-user", result.user.displayName);
       setIsAuth(cookies.get("auth-token"));
     }
     catch (err) {
@@ -27,7 +28,7 @@ const Auth: FC<Props> = ({ isAuth, setIsAuth }) => {
   };
 
   return (
-    <div id="auth" className="flex flex-col my-auto container self-center h-full">
+    <div id="auth" className="flex flex-col my-auto container self-center h-full  ">
       <p className="m-6">
         Sign In with Google to continue
       </p>
