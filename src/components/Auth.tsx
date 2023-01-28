@@ -13,11 +13,12 @@ interface Props {
 }
 
 const Auth: FC<Props> = ({ isAuth, setIsAuth }) => {
-  const signInWithGoogle = async () => {
+  async function signInWithGoogle() {
     try {
       const result: UserCredential = await signInWithPopup(auth, provider);
       console.log(result)
       cookies.set("auth-token", result.user.refreshToken);
+      setIsAuth(cookies.get("auth-token"));
     }
     catch (err) {
       console.error(err);
@@ -26,8 +27,8 @@ const Auth: FC<Props> = ({ isAuth, setIsAuth }) => {
   };
 
   return (
-    <div className="container auth">
-      <p>
+    <div id="auth" className="flex flex-col my-auto container self-center h-full">
+      <p className="m-6">
         Sign In with Google to continue
       </p>
       <button onClick={signInWithGoogle}

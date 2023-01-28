@@ -16,27 +16,20 @@ const App: FC = () => {
   const roomInputRef = useRef<null | HTMLInputElement>(null);
 
   return (
-    <div id='app' className="App flex flex-col space-between h-[100vh]">
-      <div id="navbar">
+    <div id='app' className="App flex flex-col space-between h-[100vh] w-[100vw]">
         <NavBar />
-      </div>
-      <div id="hero" className='flex flex-col h-full space-around'>
-        {/* check if user is authenticated */}
-        {!isAuth ?
-          <div id='auth'>
-             <Auth isAuth={isAuth} setIsAuth={setIsAuth} />
-          </div>
-          :
-          <div id='hero-cont' className='my-auto'>
-            {/* check if in a room, if so display such room */}
-            {true ?
+        {!isAuth ? (
+          <Auth isAuth={isAuth} setIsAuth={setIsAuth} />
+        ) : (
+          <div id='hero' className='flex flex-col justify-center self-center h-full w-full '>
+            {room ?
               <ChatRoom room={room} />
               :
               <SelectRoom roomInputRef={roomInputRef} room={room} setRoom={setRoom} />
             }
           </div>
+        )
         }
-      </div>
     </div>
   );
 };
